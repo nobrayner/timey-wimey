@@ -17,13 +17,13 @@ export type TimeSheet = {
 }
 
 interface TimeSheetState {
-  timesheets: TimeSheet[]
-  timeentries: TimeEntry[]
+  sheets: TimeSheet[]
+  entries: TimeEntry[]
 }
 
 const initialState: TimeSheetState = {
-  timesheets: [],
-  timeentries: []
+  sheets: [],
+  entries: []
 }
 
 export const timesheetsSlice = createSlice({
@@ -31,7 +31,7 @@ export const timesheetsSlice = createSlice({
   initialState,
   reducers: {
     addTimeSheet: state => {
-      state.timesheets.push({
+      state.sheets.push({
         id: 0,
         date: new Date(),
         timeentryIds: []
@@ -41,5 +41,7 @@ export const timesheetsSlice = createSlice({
 })
 
 export const { addTimeSheet } = timesheetsSlice.actions
+
+export const selectTimesheets = (state: RootState) => state.timesheets.sheets
 
 export default timesheetsSlice.reducer

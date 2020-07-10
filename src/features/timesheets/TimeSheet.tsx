@@ -52,7 +52,7 @@ function TimeSheetDisplay() {
       {section}
       <footer>
         <button onClick={addNewTimeEntry} disabled={!canAddNewTimeEntry(timesheet.id)}>+ New Entry</button>
-        <button className="update-timelogs" onClick={finaliseTimesheet} disabled={!canAddNewTimeEntry(timesheet.id)}>Finalise Timesheet</button>
+        <button className={styles['update-timelogs']} onClick={finaliseTimesheet} disabled={!canAddNewTimeEntry(timesheet.id)}>Finalise Timesheet</button>
       </footer >
     </main >
   )
