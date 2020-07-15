@@ -18,6 +18,8 @@ interface AddTimeEntryPayload {
 
 const initialState: TimeEntry[] = []
 
+let timeEntryId = 0
+
 export const timeEntriesSlice = createSlice({
   name: 'timesheets',
   initialState,
@@ -28,7 +30,7 @@ export const timeEntriesSlice = createSlice({
       },
       prepare(payload: AddTimeEntryPayload) {
         let timeEntry: TimeEntry = {
-          id: 0,
+          id: timeEntryId++,
           start: payload.start ?? '',
           end: payload.end ?? '',
           ticket: payload.ticket ?? '',

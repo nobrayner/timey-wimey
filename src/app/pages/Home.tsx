@@ -1,10 +1,6 @@
 import React from 'react'
 import TimeEntriesList from '../../features/timeentries/TimeEntriesList'
 
-function Home() {
-  return (
-    <TimeEntriesList />
-  )
-}
+const Home = () => <TimeEntriesList />
 
 export default Home

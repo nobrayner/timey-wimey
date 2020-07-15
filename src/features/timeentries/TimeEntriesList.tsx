@@ -1,6 +1,8 @@
 import React from 'react'
 //import styles from './TimeSheet.module.css'
 import { TimeEntry } from './timeEntriesSlice'
+import { RootState } from '../../app/store'
+import { connect } from 'react-redux'
 
 interface TimeEntriesListProps {
   timeEntries: TimeEntry[]
@@ -26,4 +28,8 @@ export const TimeEntriesList = ({ timeEntries }: TimeEntriesListProps) => (
   </>
 )
 
-export default TimeEntriesList
+const mapState = (state: RootState) => ({
+  timeEntries: state.timeEntries
+})
+
+export default connect(mapState)(TimeEntriesList)
