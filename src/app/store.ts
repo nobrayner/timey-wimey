@@ -1,9 +1,9 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import timesheetsReducer from '../features/timesheets/timesheetsSlice'
+import timeEntriesReducer from '../features/timeentries/timeEntriesSlice'
 
 export const store = configureStore({
   reducer: {
-    timesheets: timesheetsReducer,
+    timeEntries: timeEntriesReducer,
   },
 });
 

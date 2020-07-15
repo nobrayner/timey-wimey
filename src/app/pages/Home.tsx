@@ -1,9 +1,9 @@
 import React from 'react'
-import TimeSheetDisplay from '../../features/timesheets/TimeSheet'
+import TimeSheetDisplay from '../../features/timeentries/TimeEntriesList'
 
 function Home() {
   return (
-    <TimeSheetDisplay />
+    <p>Home</p>
   )
 }
 
