@@ -1,10 +1,6 @@
 import React from 'react'
-import TimeSheetDisplay from '../../features/timesheets/TimeSheet'
+import TimeEntriesList from '../../features/timeentries/TimeEntriesList'
 
-function Home() {
-  return (
-    <TimeSheetDisplay />
-  )
-}
+const Home = () => <TimeEntriesList />
 
 export default Home
