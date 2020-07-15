@@ -7,6 +7,12 @@ export const store = configureStore({
   },
 });
 
+//@ts-ignore
+if (window.Cypress) {
+  //@ts-ignore
+  window.store = store
+}
+
 export type RootState = ReturnType<typeof store.getState>;
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
