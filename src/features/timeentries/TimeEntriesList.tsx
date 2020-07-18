@@ -13,16 +13,16 @@ export const TimeEntriesList = ({ timeEntries }: TimeEntriesListProps) => (
     {timeEntries.map(({ id, start, end, ticket, details }) => (
       <section key={`timeEntry_${id}`} id={`timeEntry_${id}`}>
         <label htmlFor={`start_${id}`}>Start</label>
-        <input name={`start_${id}`} type="text" maxLength={8} required value={start} />
+        <input id={`start_${id}`} type="text" maxLength={8} required value={start} />
 
         <label htmlFor={`end_${id}`}>End</label>
-        <input name={`end_${id}`} type="text" maxLength={8} required value={end} />
+        <input id={`end_${id}`} type="text" maxLength={8} required value={end} />
 
         <label htmlFor={`ticket_${id}`}>Ticket</label>
-        <input name={`ticket_${id}`} type="text" required value={ticket} />
+        <input id={`ticket_${id}`} type="text" required value={ticket} />
 
         <label htmlFor={`details_${id}`}>Details</label>
-        <input name={`details_${id}`} type="text" required value={details} />
+        <input id={`details_${id}`} type="text" required value={details} />
       </section>
     ))}
   </>

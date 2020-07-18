@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction, Update } from '@reduxjs/toolkit'
 import { AppThunk, RootState } from '../../app/store'
 
 export interface TimeEntry {
@@ -9,11 +9,19 @@ export interface TimeEntry {
   details: string
 }
 
+export type TimeEntryUpdateableProperties = 'start' | 'end' | 'ticket' | 'details'
+
 interface AddTimeEntryPayload {
   start?: string
   end?: string
   ticket?: string
   details?: string
+}
+
+interface UpdateTimeEntryPayload {
+  id: number
+  property: TimeEntryUpdateableProperties
+  newValue: string
 }
 
 type TimeEntriesSliceState = {
@@ -47,12 +55,19 @@ export const timeEntriesSlice = createSlice({
           payload: timeEntry
         }
       }
+    },
+    updateTimeEntry(state, action: PayloadAction<UpdateTimeEntryPayload>) {
+      let { id, property, newValue } = action.payload
+
+      let timeEntry = state.entries.find(te => te.id === id)
+
+      if (timeEntry) {
+        timeEntry[property] = newValue
+      }
     }
   }
 })
 
-export const { addTimeEntry } = timeEntriesSlice.actions
-
-//export const selectTimesheets = (state: RootState) => state.timesheets.sheets
+export const { addTimeEntry, updateTimeEntry } = timeEntriesSlice.actions
 
 export default timeEntriesSlice.reducer
