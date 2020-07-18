@@ -7,8 +7,7 @@ export const store = configureStore({
   },
 });
 
-//@ts-ignore
-if (window.Cypress) {
+if (process.env.NODE_ENV !== 'production') {
   //@ts-ignore
   window.store = store
 }

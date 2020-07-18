@@ -18,7 +18,7 @@ describe('timeEntries', () => {
       store.dispatch(addTimeEntry(records[0]))
       store.dispatch(addTimeEntry(records[1]))
 
-      expect(store.getState().timeEntries).toEqual(records)
+      expect(store.getState().timeEntries.entries).toEqual(records)
     })
   })
 

@@ -29,7 +29,7 @@ export const TimeEntriesList = ({ timeEntries }: TimeEntriesListProps) => (
 )
 
 const mapState = (state: RootState) => ({
-  timeEntries: state.timeEntries
+  timeEntries: state.timeEntries.entries
 })
 
 export default connect(mapState)(TimeEntriesList)

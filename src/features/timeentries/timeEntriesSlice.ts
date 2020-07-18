@@ -16,9 +16,14 @@ interface AddTimeEntryPayload {
   details?: string
 }
 
-const initialState: TimeEntry[] = []
-
-let timeEntryId = 0
+type TimeEntriesSliceState = {
+  nextId: number
+  entries: TimeEntry[]
+}
+const initialState: TimeEntriesSliceState = {
+  nextId: 0,
+  entries: []
+}
 
 export const timeEntriesSlice = createSlice({
   name: 'timesheets',
@@ -26,11 +31,13 @@ export const timeEntriesSlice = createSlice({
   reducers: {
     addTimeEntry: {
       reducer(state, action: PayloadAction<TimeEntry>) {
-        state.push(action.payload)
+        let newEntry = action.payload
+        newEntry.id = state.nextId++
+        state.entries.push(newEntry)
       },
       prepare(payload: AddTimeEntryPayload) {
         let timeEntry: TimeEntry = {
-          id: timeEntryId++,
+          id: -1,
           start: payload.start ?? '',
           end: payload.end ?? '',
           ticket: payload.ticket ?? '',
