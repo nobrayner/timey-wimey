@@ -43,4 +43,12 @@ describe('Time Wimey', () => {
     cy.get('#timeEntry_2 input[id^=\'ticket\']').should('have.value', '')
     cy.get('#timeEntry_2 input[id^=\'details\']').should('have.value', '')
   })
+
+  it('Can remove a time entry', () => {
+    cy.get('[id^=\'timeEntry_\']').as('timeEntries').should('have.length', 2)
+
+    cy.get('#timeEntry_1 button[id^=\'remove\']').click()
+
+    cy.get('@timeEntries').should('have.length', 1)
+  })
 })
