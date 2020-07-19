@@ -1,5 +1,5 @@
 import { configureStore, EnhancedStore } from "@reduxjs/toolkit"
-import timeEntriesReducer, { addTimeEntry, updateTimeEntry } from '../features/timeentries/timeEntriesSlice'
+import timeEntriesReducer, { addTimeEntry, updateTimeEntry, removeTimeEntry } from '../features/timeentries/timeEntriesSlice'
 
 describe('timeEntries', () => {
   let store: EnhancedStore
@@ -46,6 +46,18 @@ describe('timeEntries', () => {
         store.dispatch(updateTimeEntry({ id: 0, property: update.property, newValue: update.newValue }))
         expect(store.getState().timeEntries.entries[0][update.property]).toEqual(update.newValue)
       })
+    })
+  })
+
+  describe('removeTimeEntry action', () => {
+    it('removes the time entry', () => {
+      store.dispatch(removeTimeEntry(0))
+
+      let entry = records[1]
+      let timeEntries: Array<typeof entry> = []
+      timeEntries.push(entry)
+
+      expect(store.getState().timeEntries.entries).toEqual(timeEntries)
     })
   })
 })

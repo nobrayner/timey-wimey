@@ -76,10 +76,18 @@ export const timeEntriesSlice = createSlice({
       if (timeEntry) {
         timeEntry[property] = newValue
       }
+    },
+    removeTimeEntry(state, action: PayloadAction<number>) {
+      let id = action.payload
+      let timeEntryIndex = state.entries.findIndex(te => te.id === id)
+
+      if(timeEntryIndex > -1) {
+        state.entries.splice(timeEntryIndex, 1)
+      }
     }
   }
 })
 
-export const { addTimeEntry, updateTimeEntry } = timeEntriesSlice.actions
+export const { addTimeEntry, updateTimeEntry, removeTimeEntry } = timeEntriesSlice.actions
 
 export default timeEntriesSlice.reducer

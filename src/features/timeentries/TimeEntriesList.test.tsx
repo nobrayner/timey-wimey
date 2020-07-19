@@ -1,6 +1,7 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { TimeEntriesList } from './TimeEntriesList'
+import userEvent from '@testing-library/user-event'
 
 describe('TimeEntriesList', () => {
   const records = [
@@ -9,12 +10,14 @@ describe('TimeEntriesList', () => {
   ]
 
   let updateTimeEntry: jest.Mock
+  let removeTimeEntry: jest.Mock
 
   beforeEach(() => {
     updateTimeEntry = jest.fn().mockName('updateTimeEntry')
+    removeTimeEntry = jest.fn().mockName('removeTimeEntry')
 
     //@ts-ignore
-    render(<TimeEntriesList timeEntries={records} updateTimeEntry={updateTimeEntry} />)
+    render(<TimeEntriesList timeEntries={records} updateTimeEntry={updateTimeEntry} removeTimeEntry={removeTimeEntry} />)
   })
 
   it('Displays time entries', () => {
@@ -52,5 +55,11 @@ describe('TimeEntriesList', () => {
     // userEvent.type(details0, 'Ranted about customer')
     fireEvent.change(details0, { target: { value: 'Ranted about customer' } })
     expect(updateTimeEntry).toHaveBeenCalledWith({ id: 0, property: 'details', newValue: 'Ranted about customer' })
+  })
+
+  it('Can remove time entries', () => {
+    userEvent.click(screen.getByRole('button', { name: 'Remove time entry: \'Did stuff\'' }))
+
+    expect(removeTimeEntry).toHaveBeenCalledTimes(1)
   })
 })
