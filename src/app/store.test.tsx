@@ -24,6 +24,12 @@ describe('timeEntries', () => {
     it('stores the time entries', () => {
       expect(store.getState().timeEntries.entries).toEqual(records)
     })
+
+    it('uses last entries end time as new entries start time if no start time is provided', () => {
+      store.dispatch(addTimeEntry({}))
+
+      expect(store.getState().timeEntries.entries[2].start).toEqual('03:15 PM')
+    })
   })
 
   describe('updateTimeEntry action', () => {

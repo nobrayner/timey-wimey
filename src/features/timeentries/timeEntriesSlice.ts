@@ -35,6 +35,7 @@ const initialState: TimeEntriesSliceState = {
 // Hacky work-around to make sure there is test data for Cypress in the store
 //@ts-ignore
 if (process.env.NODE_ENV !== 'production' && window.Cypress) {
+  initialState.nextId = 2
   initialState.entries = [
     { id: 0, start: '09:00 AM', end: '10:00 AM', ticket: '1234', details: 'Did stuff' },
     { id: 1, start: '10:00 AM', end: '03:15 PM', ticket: '4321', details: 'More stuff' },
@@ -47,8 +48,11 @@ export const timeEntriesSlice = createSlice({
   reducers: {
     addTimeEntry: {
       reducer(state, action: PayloadAction<TimeEntry>) {
+        let previousEntry = state.entries[state.entries.length - 1]
+
         let newEntry = action.payload
         newEntry.id = state.nextId++
+        newEntry.start = newEntry.start || (previousEntry?.end ?? '')
         state.entries.push(newEntry)
       },
       prepare(payload: AddTimeEntryPayload) {
