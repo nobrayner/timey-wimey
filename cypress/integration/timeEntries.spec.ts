@@ -2,17 +2,8 @@ import { addTimeEntry } from '../../src/features/timeentries/timeEntriesSlice'
 
 describe('Time Wimey', () => {
   it('Can display time entries', () => {
-    const timeEntries = [
-      { start: '09:00 AM', end: '10:00 AM', ticket: '1234', details: 'Did stuff' },
-      { start: '10:00 AM', end: '03:15 PM', ticket: '4321', details: 'More stuff' },
-    ]
-
     cy.visit('/')
 
-    cy.window().its('store').then(store => {
-      store.dispatch(addTimeEntry(timeEntries[0]))
-      store.dispatch(addTimeEntry(timeEntries[1]))
-    })
     cy.get('[id^=\'timeEntry_\']').should('have.length', 2)
 
     cy.get('#timeEntry_0 input[id^=\'start\']').should('have.value', '09:00 AM')
@@ -29,18 +20,7 @@ describe('Time Wimey', () => {
   })
 
   it('Can edit time entries', () => {
-    const timeEntries = [
-      { start: '09:00 AM', end: '10:00 AM', ticket: '1234', details: 'Did stuff' },
-      { start: '10:00 AM', end: '03:15 PM', ticket: '4321', details: 'More stuff' },
-    ]
-
     cy.visit('/')
-
-    cy.window().its('store').then(store => {
-      store.dispatch(addTimeEntry(timeEntries[0]))
-      store.dispatch(addTimeEntry(timeEntries[1]))
-    })
-    cy.get('[id^=\'timeEntry_\']').should('have.length', 2)
 
     cy.get('#timeEntry_0 input[id^=\'start\']').clear().type('09:30 AM').should('have.value', '09:30 AM')
     cy.get('#timeEntry_0 input[id^=\'end\']').clear().type('09:45 AM').should('have.value', '09:45 AM')

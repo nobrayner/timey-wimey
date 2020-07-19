@@ -1,5 +1,5 @@
 import { configureStore, EnhancedStore } from "@reduxjs/toolkit"
-import timeEntriesReducer, { TimeEntryUpdateableProperties, addTimeEntry, updateTimeEntry } from '../features/timeentries/timeEntriesSlice'
+import timeEntriesReducer, { addTimeEntry, updateTimeEntry } from '../features/timeentries/timeEntriesSlice'
 
 describe('timeEntries', () => {
   let store: EnhancedStore
@@ -28,12 +28,7 @@ describe('timeEntries', () => {
 
   describe('updateTimeEntry action', () => {
     it('updates the time entry', () => {
-      type Update = {
-        property: TimeEntryUpdateableProperties
-        newValue: string
-      }
-
-      const updates: Update[] = [
+      const updates = [
         { property: 'start', newValue: '10:00 AM' },
         { property: 'end', newValue: '10:15 AM' },
         { property: 'ticket', newValue: 'ABC-123' },
@@ -41,6 +36,7 @@ describe('timeEntries', () => {
       ]
 
       updates.map(update => {
+        //@ts-ignore
         store.dispatch(updateTimeEntry({ id: 0, property: update.property, newValue: update.newValue }))
         expect(store.getState().timeEntries.entries[0][update.property]).toEqual(update.newValue)
       })
