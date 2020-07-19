@@ -7,11 +7,6 @@ export const store = configureStore({
   },
 });
 
-if (process.env.NODE_ENV !== 'production') {
-  //@ts-ignore
-  window.store = store
-}
-
 export type RootState = ReturnType<typeof store.getState>;
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,

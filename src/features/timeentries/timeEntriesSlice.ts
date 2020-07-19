@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AppThunk, RootState } from '../../app/store'
+//import { AppThunk, RootState } from '../../app/store'
 
 export interface TimeEntry {
   id: number
@@ -8,12 +8,19 @@ export interface TimeEntry {
   ticket: string
   details: string
 }
+type TimeEntryUpdateableProperties = 'start' | 'end' | 'ticket' | 'details'
 
 interface AddTimeEntryPayload {
   start?: string
   end?: string
   ticket?: string
   details?: string
+}
+
+export interface UpdateTimeEntryPayload {
+  id: number
+  property: TimeEntryUpdateableProperties
+  newValue: string
 }
 
 type TimeEntriesSliceState = {
@@ -25,8 +32,17 @@ const initialState: TimeEntriesSliceState = {
   entries: []
 }
 
+// Hacky work-around to make sure there is test data for Cypress in the store
+//@ts-ignore
+if (process.env.NODE_ENV !== 'production' && window.Cypress) {
+  initialState.entries = [
+    { id: 0, start: '09:00 AM', end: '10:00 AM', ticket: '1234', details: 'Did stuff' },
+    { id: 1, start: '10:00 AM', end: '03:15 PM', ticket: '4321', details: 'More stuff' },
+  ]
+}
+
 export const timeEntriesSlice = createSlice({
-  name: 'timesheets',
+  name: 'timeEntries',
   initialState,
   reducers: {
     addTimeEntry: {
@@ -47,12 +63,19 @@ export const timeEntriesSlice = createSlice({
           payload: timeEntry
         }
       }
+    },
+    updateTimeEntry(state, action: PayloadAction<UpdateTimeEntryPayload>) {
+      const { id, property, newValue } = action.payload
+
+      const timeEntry = state.entries.find(timeEntry => timeEntry.id === id)
+
+      if (timeEntry) {
+        timeEntry[property] = newValue
+      }
     }
   }
 })
 
-export const { addTimeEntry } = timeEntriesSlice.actions
-
-//export const selectTimesheets = (state: RootState) => state.timesheets.sheets
+export const { addTimeEntry, updateTimeEntry } = timeEntriesSlice.actions
 
 export default timeEntriesSlice.reducer
