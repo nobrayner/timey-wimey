@@ -1,15 +1,17 @@
 import React from 'react'
-//import styles from './TimeSheet.module.css'
-import { updateTimeEntry } from './timeEntriesSlice'
 import { RootState } from '../../app/store'
 import { connect, ConnectedProps } from 'react-redux'
+import { updateTimeEntry, removeTimeEntry } from './timeEntriesSlice'
+//import styles from './TimeSheet.module.css'
 
 type TimeEntriesListProps = ConnectedProps<typeof connector>
 
-export const TimeEntriesList = ({ timeEntries, updateTimeEntry }: TimeEntriesListProps) => (
+export const TimeEntriesList = ({ timeEntries, updateTimeEntry, removeTimeEntry }: TimeEntriesListProps) => (
   <>
     {timeEntries.map(({ id, start, end, ticket, details }) => (
       <section key={`timeEntry_${id}`} id={`timeEntry_${id}`}>
+        <button id={`remove_${id}`} aria-label={`Remove time entry: '${details}'`} onClick={e => removeTimeEntry(id)}>X</button>
+
         <label htmlFor={`start_${id}`}>Start</label>
         <input id={`start_${id}`} type="text" maxLength={8} required value={start}
           onChange={e => updateTimeEntry({ id, property: 'start', newValue: e.currentTarget.value })} />
@@ -35,7 +37,8 @@ const mapState = (state: RootState) => ({
 })
 
 const mapDispatch = {
-  updateTimeEntry
+  updateTimeEntry,
+  removeTimeEntry
 }
 
 const connector = connect(mapState, mapDispatch)
