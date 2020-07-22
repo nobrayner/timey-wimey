@@ -4,7 +4,7 @@ Detailed requirements for features
 
 ## Display Time Entries
 
-TBD
+- Time entries are retrieved from the store - `state.timeEntries.entries`
 
 ## Add Time Entries
 
