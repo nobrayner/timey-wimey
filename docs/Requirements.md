@@ -12,10 +12,10 @@
 
 ### Add Time Entry
 - validate no previous uncompleted entry
--- if previous entry, set 'disallow create entry' flag == true
--- if !previous entry, set 'disallow create entry' flag == false
+  - if previous entry, set 'disallow create entry' flag == true
+  - if !previous entry, set 'disallow create entry' flag == false
 - if no previous entry, allow new entry to be created (check 'disallow create entry' flag)
 - on creation of new entry, append start timestamp 
--- check if previous entry exists at all
--- if yes, start timestamp == previous entry completed time (pull from previous entry state element)
--- if no, start timestamp == now +- safety margin (small margin fudge to account for test execution time)
+  - check if previous entry exists at all
+  - if yes, start timestamp == previous entry completed time (pull from previous entry state element)
+  - if no, start timestamp == now +- safety margin (small margin fudge to account for test execution time)
