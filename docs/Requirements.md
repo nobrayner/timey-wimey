@@ -29,7 +29,7 @@ Detailed requirements for features
 
 ## Modify Time Entries
 
-- 
+TBD
 
 ## Remove Time Entries
 
