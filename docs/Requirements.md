@@ -22,12 +22,14 @@ Detailed requirements for features
 
     - `TimeEntry.start`, `TimeEntry.ticket`, and `TimeEntry.details` of the previous entry have a value
 - Creating a new entry
+  - Set `TimeEntry.id` to the next available id
+    - Read from the store - `state.timeEntries.nextId`
   - Set `TimeEntry.start` to the current time (rounded to the nearest 15 minutes)
     - If there is a previous entry with no `TimeEntry.end` set, set previous entry's `TimeEntry.end` to the current time (rounded to the nearest 15 minutes)
 
 ## Modify Time Entries
 
-TBD
+- 
 
 ## Remove Time Entries
 
