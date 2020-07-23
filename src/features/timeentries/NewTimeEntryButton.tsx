@@ -1,20 +1,15 @@
 import React from 'react'
 import { connect, ConnectedProps } from 'react-redux'
 import { RootState } from '../../app/store'
-import { addTimeEntry } from './timeEntriesSlice'
+import { addTimeEntry, canAddNewEntry } from './timeEntriesSlice'
 
 type NewTimeEntryButtonProps = ConnectedProps<typeof connector>
 
-export const NewTimeEntryButton = ({ lastEntry, addTimeEntry }: NewTimeEntryButtonProps) => {
-  let isDisabled = lastEntry !== undefined && (!lastEntry.start || !lastEntry.end || !lastEntry.ticket || !lastEntry.details)
-
-  return (
-    <button disabled={isDisabled} onClick={() => addTimeEntry({})}>+ New Entry</button>
-  )
-}
+export const NewTimeEntryButton = ({ canAddNewEntry, addTimeEntry }: NewTimeEntryButtonProps) =>
+  <button disabled={!canAddNewEntry} onClick={() => addTimeEntry()}>+ New Entry</button>
 
 const mapState = (state: RootState) => ({
-  lastEntry: state.timeEntries.entries[state.timeEntries.entries.length - 1]
+  canAddNewEntry: canAddNewEntry(state)
 })
 
 const mapDispatch = {
