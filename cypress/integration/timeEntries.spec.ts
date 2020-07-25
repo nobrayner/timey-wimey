@@ -38,7 +38,21 @@ describe('Time Wimey', () => {
 
     cy.get('@timeEntries').should('have.length', 3)
 
-    cy.get('#timeEntry_2 input[id^=\'start\']').should('have.value', '03:15 PM')
+    cy.get('#timeEntry_2 input[id^=\'start\']').should($input => {
+      let now = new Date()
+      let val = $input.first().attr('value')
+
+      if (val) {
+        let hours = Number(val.split(':')[0])
+        let minutes = Number(val.split(' ')[0].split(':')[1])
+
+        let nowHours = now.getHours() % 12
+        nowHours = nowHours === 0 ? 12 : nowHours
+
+        expect(hours).to.be.approximately(nowHours, 1)
+        expect(minutes).to.be.approximately(now.getMinutes(), 7)
+      }
+    })
     cy.get('#timeEntry_2 input[id^=\'end\']').should('have.value', '')
     cy.get('#timeEntry_2 input[id^=\'ticket\']').should('have.value', '')
     cy.get('#timeEntry_2 input[id^=\'details\']').should('have.value', '')

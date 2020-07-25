@@ -1,5 +1,5 @@
 import { configureStore, EnhancedStore } from "@reduxjs/toolkit"
-import timeEntriesReducer, { addTimeEntry, updateTimeEntry, removeTimeEntry } from '../features/timeentries/timeEntriesSlice'
+import timeEntriesReducer, { addTimeEntry, updateTimeEntry, removeTimeEntry, canAddNewEntry } from '../features/timeentries/timeEntriesSlice'
 
 describe('timeEntries', () => {
   let store: EnhancedStore
@@ -16,19 +16,42 @@ describe('timeEntries', () => {
       }
     })
 
-    store.dispatch(addTimeEntry(records[0]))
-    store.dispatch(addTimeEntry(records[1]))
+    store.dispatch(addTimeEntry())
+    store.dispatch(addTimeEntry())
   })
 
   describe('addTimeEntry action', () => {
     it('stores the time entries', () => {
-      expect(store.getState().timeEntries.entries).toEqual(records)
+      let entries = store.getState().timeEntries.entries
+
+      expect(entries).toHaveLength(2)
+      expect(entries[0].start).toBeTruthy()
+      expect(entries[0].end).toBeTruthy()
+      expect(entries[0].ticket).toBeFalsy()
+      expect(entries[0].details).toBeFalsy()
+      expect(entries[1].start).toBeTruthy()
+      expect(entries[1].end).toBeFalsy()
+      expect(entries[1].ticket).toBeFalsy()
+      expect(entries[1].details).toBeFalsy()
     })
 
-    it('uses last entries end time as new entries start time if no start time is provided', () => {
-      store.dispatch(addTimeEntry({}))
+    it('sets start time of new entry, and end time of previous entry', () => {
+      store.dispatch(addTimeEntry())
 
-      expect(store.getState().timeEntries.entries[2].start).toEqual('03:15 PM')
+      let entries = store.getState().timeEntries.entries
+
+      expect(entries[2].start).toEqual(entries[1].end)
+      expect(entries[2]).toBeTruthy()
+    })
+
+    it('sets the start time of new entry, but doesn\'t set end time of previous entry', () => {
+      store.dispatch(updateTimeEntry({ id: 1, property: 'end', newValue: '05:00 PM' }))
+      store.dispatch(addTimeEntry())
+
+      let entries = store.getState().timeEntries.entries
+
+      expect(entries[1].end).toEqual('05:00 PM')
+      expect(entries[2].start).toBeTruthy()
     })
   })
 
@@ -53,11 +76,24 @@ describe('timeEntries', () => {
     it('removes the time entry', () => {
       store.dispatch(removeTimeEntry(0))
 
-      let entry = records[1]
-      let timeEntries: Array<typeof entry> = []
-      timeEntries.push(entry)
+      let entries = store.getState().timeEntries.entries
 
-      expect(store.getState().timeEntries.entries).toEqual(timeEntries)
+      expect(entries).toHaveLength(1)
+    })
+  })
+
+  describe('canAddNewEntry selector', () => {
+    it('returns true once the previous entry has a value for start, ticket, and details', () => {
+      expect(canAddNewEntry(store.getState())).toBe(false)
+
+      store.dispatch(updateTimeEntry({ id: 1, property: 'start', newValue: '09:00 AM' }))
+      expect(canAddNewEntry(store.getState())).toBe(false)
+
+      store.dispatch(updateTimeEntry({ id: 1, property: 'ticket', newValue: '1234'}))
+      expect(canAddNewEntry(store.getState())).toBe(false)
+
+      store.dispatch(updateTimeEntry({ id: 1, property: 'details', newValue: 'Did stuff'}))
+      expect(canAddNewEntry(store.getState())).toBe(true)
     })
   })
 })
