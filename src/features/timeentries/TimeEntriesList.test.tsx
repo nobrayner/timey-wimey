@@ -17,7 +17,7 @@ describe('TimeEntriesList', () => {
     removeTimeEntry = jest.fn().mockName('removeTimeEntry')
 
     //@ts-ignore
-    render(<TimeEntriesList timeEntries={records} updateTimeEntry={updateTimeEntry} removeTimeEntry={removeTimeEntry} />)
+    render(<TimeEntriesList isLoading={false} timeEntries={records} updateTimeEntry={updateTimeEntry} removeTimeEntry={removeTimeEntry} />)
   })
 
   it('Displays time entries', () => {

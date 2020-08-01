@@ -1,7 +1,9 @@
 import { addTimeEntry } from '../../src/features/timeentries/timeEntriesSlice'
 
 describe('Timey Wimey', () => {
-  beforeEach(() => cy.visit('/'))
+  beforeEach(() => {
+    cy.visit('/')
+  })
 
   it('Can display time entries', () => {
     cy.get('[id^=\'timeEntry_\']').should('have.length', 2)
