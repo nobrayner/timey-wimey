@@ -29,19 +29,20 @@ export interface UpdateTimeEntryPayload {
   newValue: string
 }
 
-type TimeEntriesSliceState = {
-  nextId: number
+type TimeEntriesState = {
+  loading: boolean
   entries: TimeEntry[]
 }
-const initialState: TimeEntriesSliceState = {
-  nextId: 0,
+
+let initialState: TimeEntriesState = {
+  loading: true,
   entries: []
 }
 
 // Hacky work-around to make sure there is test data for Cypress in the store
 //@ts-ignore
 if (process.env.NODE_ENV !== 'production' && window.Cypress) {
-  initialState.nextId = 2
+  initialState.loading = false
   initialState.entries = [
     { id: 0, start: '09:00 AM', end: '10:00 AM', ticket: '1234', details: 'Did stuff' },
     { id: 1, start: '10:00 AM', end: '03:15 PM', ticket: '4321', details: 'More stuff' },
@@ -52,17 +53,21 @@ export const timeEntriesSlice = createSlice({
   name: 'timeEntries',
   initialState,
   reducers: {
+    loadState(state, action: PayloadAction<TimeEntry[]>) {
+      state.loading = false
+      state.entries = action.payload
+    },
     addTimeEntry(state) {
       let nowRounded = currentRoundedTime(new Date(), 15) // Round to nearest 15 minutes increment
-      
+
       let previousEntry = state.entries[state.entries.length - 1]
-      
+
       if (previousEntry && !previousEntry.end) {
         previousEntry.end = nowRounded
       }
 
       let newEntry: TimeEntry = {
-        id: state.nextId++,
+        id: state.entries.length,
         start: nowRounded,
         end: '',
         ticket: '',
@@ -91,17 +96,21 @@ export const timeEntriesSlice = createSlice({
   }
 })
 
-export const { addTimeEntry, updateTimeEntry, removeTimeEntry } = timeEntriesSlice.actions
+export const { loadState, addTimeEntry, updateTimeEntry, removeTimeEntry } = timeEntriesSlice.actions
 
 const lastEntrySelector = (state: RootState) => state.timeEntries.entries[state.timeEntries.entries.length - 1]
+const loadingSelector = (state: RootState) => state.timeEntries.loading
 export const canAddNewEntry = createSelector(
-  lastEntrySelector,
-  lastEntry => {
+  [
+    lastEntrySelector,
+    loadingSelector
+  ],
+  (lastEntry, loading) => {
     if (lastEntry !== undefined) {
       return !!lastEntry.start && !!lastEntry.ticket && !!lastEntry.details
     }
 
-    return true
+    return !loading
   }
 )
 

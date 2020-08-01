@@ -1,3 +1,6 @@
+.timesheet {
+  transition: height 1s;
+}
 button {
   background-color: white;
   border: 1px dotted #999999;

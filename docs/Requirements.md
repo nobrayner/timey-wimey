@@ -35,6 +35,7 @@ TBD
 
 TBD
 
-## State saved to indexeddb
+## Save Store State Locally
 
-TBD
+- Any changes to state are stored in indexeddb
+- When the app is loaded, read the saved state from indexeddb

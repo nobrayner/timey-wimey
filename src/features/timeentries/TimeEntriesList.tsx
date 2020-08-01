@@ -2,13 +2,13 @@ import React from 'react'
 import { RootState } from '../../app/store'
 import { connect, ConnectedProps } from 'react-redux'
 import { updateTimeEntry, removeTimeEntry } from './timeEntriesSlice'
-//import styles from './TimeSheet.module.css'
 
 type TimeEntriesListProps = ConnectedProps<typeof connector>
 
-export const TimeEntriesList = ({ timeEntries, updateTimeEntry, removeTimeEntry }: TimeEntriesListProps) => (
-  <>
-    {timeEntries.map(({ id, start, end, ticket, details }) => (
+export const TimeEntriesList = ({ isLoading, timeEntries, updateTimeEntry, removeTimeEntry }: TimeEntriesListProps) => {
+  let entries
+  if (!isLoading) {
+    entries = timeEntries.map(({ id, start, end, ticket, details }) => (
       <section key={`timeEntry_${id}`} id={`timeEntry_${id}`}>
         <button id={`remove_${id}`} aria-label={`Remove time entry: '${details}'`} onClick={e => removeTimeEntry(id)}>X</button>
 
@@ -28,11 +28,20 @@ export const TimeEntriesList = ({ timeEntries, updateTimeEntry, removeTimeEntry 
         <input id={`details_${id}`} type="text" required value={details}
           onChange={e => updateTimeEntry({ id, property: 'details', newValue: e.currentTarget.value })} />
       </section>
-    ))}
-  </>
-)
+    ))
+  } else {
+    entries = <p>Loading...</p>
+  }
+
+  return (
+    <>
+      {entries}
+    </>
+  )
+}
 
 const mapState = (state: RootState) => ({
+  isLoading: state.timeEntries.loading,
   timeEntries: state.timeEntries.entries
 })
 
