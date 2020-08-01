@@ -1,6 +1,6 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import db from '../db'
-import timeEntriesReducer, { loadState } from '../features/timeentries/timeEntriesSlice'
+import timeEntriesReducer, { loadState, TimeEntry } from '../features/timeentries/timeEntriesSlice'
 
 export const store = configureStore({
   reducer: {
@@ -8,8 +8,17 @@ export const store = configureStore({
   },
 });
 
+const testEntries: TimeEntry[] = [
+  { id: 0, start: '09:00 AM', end: '10:00 AM', ticket: '1234', details: 'Did stuff' },
+  { id: 1, start: '10:00 AM', end: '03:15 PM', ticket: '4321', details: 'More stuff' },
+]
 db.timeEntries.toArray().then(entries => {
-  setTimeout(() => store.dispatch(loadState(entries)), 300)
+  //@ts-ignore
+  if (process.env.NODE_ENV !== 'production' && window.Cypress) {
+    setTimeout(() => store.dispatch(loadState(testEntries)), 300)
+  } else {
+    setTimeout(() => store.dispatch(loadState(entries)), 300)
+  }
 }).catch(error => {
   console.log(error)
 })

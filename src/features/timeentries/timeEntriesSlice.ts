@@ -39,16 +39,6 @@ let initialState: TimeEntriesState = {
   entries: []
 }
 
-// Hacky work-around to make sure there is test data for Cypress in the store
-//@ts-ignore
-if (process.env.NODE_ENV !== 'production' && window.Cypress) {
-  initialState.loading = false
-  initialState.entries = [
-    { id: 0, start: '09:00 AM', end: '10:00 AM', ticket: '1234', details: 'Did stuff' },
-    { id: 1, start: '10:00 AM', end: '03:15 PM', ticket: '4321', details: 'More stuff' },
-  ]
-}
-
 export const timeEntriesSlice = createSlice({
   name: 'timeEntries',
   initialState,
