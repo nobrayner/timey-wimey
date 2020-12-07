@@ -1,5 +1,26 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+# Timey Wimey
 
+![Test Results](https://img.shields.io/github/workflow/status/nobrayner/timey-wimey/Test?logo=github&style=flat)
+![React Badge](https://img.shields.io/badge/React-v17.0.1-lightgray?style=flat&logo=react)
+[![GitHub license](https://img.shields.io/github/license/nobrayner/timey-wimey)](https://github.com/nobrayner/timey-wimey/blob/master/LICENSE)
+
+Timey Wimey is a simple time-logging app to help keep track of daily work in a job where time tracking must be done for _everything_.
+
+_image and demo TBA_
+
+## Project Goals
+
+* To decrease the mental load required when tracking time spent during the work day
+* To make easy collation of time spent and descriptions for re-logging in other systems
+
+## What I Learned
+
+* Sometimes the best solution is the simplest solution; I tried being fancy, and that net me a total restart!
+* TBD
+
+<br />
+
+# Specifics
 ## Available Scripts
 
 In the project directory, you can run:
@@ -15,7 +36,6 @@ You will also see any lint errors in the console.
 ### `yarn test`
 
 Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `yarn build`
 
@@ -24,21 +44,3 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
