@@ -5,7 +5,7 @@ import { TimeCard } from './types'
 const selectSelf = (state: RootState) => state
 export const selectTimeCards = createSelector(selectSelf, state => state.timeCards)
 
-interface RootState {
+export interface RootState {
   roundToMinutes: number,
   timeCards: TimeCard[]
 }
@@ -34,9 +34,10 @@ const timeCardsSlice = createSlice({
 })
 
 export const { addTimeCard } = timeCardsSlice.actions
+export const reducer = timeCardsSlice.reducer
 
 export const store = configureStore({
-  reducer: timeCardsSlice.reducer,
+  reducer,
   middleware: getDefaultMiddleware({
     serializableCheck: {
       ignoredActions: ['timeCards/addTimeCard']

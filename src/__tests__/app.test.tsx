@@ -1,14 +1,7 @@
 import React from 'react'
-import { store } from '../store'
-import { Provider } from 'react-redux'
-import { render as rtlRender, screen } from '@testing-library/react'
+import { render, screen } from '../test-utils'
 import userEvent from '@testing-library/user-event'
 import App from '../app'
-
-function render(ui: React.ReactElement) {
-  const Wrapper: React.FunctionComponent<{}> = ({ children }) => (<Provider store={store}>{children}</Provider>)
-  return rtlRender(ui, { wrapper: Wrapper })
-}
 
 describe('Timey Wimey', () => {
   it('displays the current date as a heading, help text, and a new button when there are no entries', () => {
