@@ -1,14 +1,33 @@
-import { configureStore, ThunkAction, Action, createSlice } from '@reduxjs/toolkit';
+import { configureStore, ThunkAction, Action, createSlice } from '@reduxjs/toolkit'
+import { roundTimeToMinutes } from './utils'
+import { TimeCard } from './types'
 
-const initialState = {
+interface StoreState {
+  roundToMinutes: number,
+  timeCards: TimeCard[]
+}
 
+const initialState: StoreState = {
+  roundToMinutes: 15,
+  timeCards: []
 }
 
 const timeCardsSlice = createSlice({
   name: 'timeCards',
   initialState,
   reducers: {
-    
+    addTimeCard(state) {
+      const now = new Date()
+      const nowRounded = roundTimeToMinutes(now, state.roundToMinutes)
+
+      state.timeCards.push({
+        id: state.timeCards.length,
+        start: nowRounded,
+        end: undefined,
+        ticket: '',
+        details: ''
+      })
+    }
   }
 })
 
