@@ -1,17 +1,19 @@
-import { configureStore, ThunkAction, Action, createSlice } from '@reduxjs/toolkit'
+import { configureStore, ThunkAction, Action, createSlice, createSelector, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { roundTimeToMinutes } from './utils'
 import { TimeCard } from './types'
 
-interface StoreState {
+const selectSelf = (state: RootState) => state
+export const selectTimeCards = createSelector(selectSelf, state => state.timeCards)
+
+interface RootState {
   roundToMinutes: number,
   timeCards: TimeCard[]
 }
 
-const initialState: StoreState = {
+const initialState: RootState = {
   roundToMinutes: 15,
   timeCards: []
 }
-
 const timeCardsSlice = createSlice({
   name: 'timeCards',
   initialState,
@@ -31,11 +33,17 @@ const timeCardsSlice = createSlice({
   }
 })
 
+export const { addTimeCard } = timeCardsSlice.actions
+
 export const store = configureStore({
-  reducer: timeCardsSlice.reducer
+  reducer: timeCardsSlice.reducer,
+  middleware: getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: ['timeCards/addTimeCard']
+    }
+  })
 });
 
-export type RootState = ReturnType<typeof store.getState>;
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
