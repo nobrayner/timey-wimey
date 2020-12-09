@@ -19,4 +19,14 @@ describe('Timey Wimey', () => {
     expect(screen.getByRole('button', { name: /\+ new card/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /\+ new card/i })).not.toBeDisabled()
   })
+
+  it('adds a new time card when clicking the \'new\' button', () => {
+    render(<App />)
+
+    expect(screen.queryAllByTestId(/^timecard/i)).toHaveLength(0)
+
+    userEvent.click(screen.getByRole('button', { name: /\+ new card/i }))
+
+    expect(screen.queryAllByTestId(/^timecard/i)).toHaveLength(1)
+  })
 })
