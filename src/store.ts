@@ -9,9 +9,11 @@ export const selectTimeSpent = createSelector(selectSelf, state => {
   const totalMinutes = state.timeCards.map(tc => {
     const { start, end } = tc
     if (start && end) {
-      const diffMilliseconds = Math.abs(end.valueOf() - start.valueOf())
+      const diffMilliseconds = end.valueOf() - start.valueOf()
 
-      return diffMilliseconds / 1000 / 60 // Time diff in minutes
+      if (diffMilliseconds >= 0) {
+        return diffMilliseconds / 1000 / 60 // Time diff in minutes
+      }
     }
 
     return 0
@@ -27,6 +29,7 @@ export const selectTimeSpent = createSelector(selectSelf, state => {
 
   return timeSpent
 })
+export const selectRoundToMinutes = createSelector(selectSelf, state => state.roundToMinutes)
 
 export interface RootState {
   roundToMinutes: number,
