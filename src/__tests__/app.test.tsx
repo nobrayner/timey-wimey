@@ -2,13 +2,14 @@ import React from 'react'
 import { render, screen, timeCardBuilder, newTimeCardDetailsBuilder } from '../test-utils'
 import userEvent from '@testing-library/user-event'
 import App from '../app'
+import { perBuild } from '@jackfranklin/test-data-bot'
 
 describe('Timey Wimey', () => {
   it('displays the current date as a heading, 0 total hours, help text, and a new button when there are no entries', () => {
     render(<App />)
 
-    expect(screen.getByRole('heading', { name: new Date().toLocaleDateString() })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /0h/i })).toBeInTheDocument()
+    expect(screen.getByText(new Date().toLocaleDateString())).toBeInTheDocument()
+    expect(screen.getByText(/0h/i)).toBeInTheDocument()
     expect(screen.getByTestId('helptext')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /\+ new card/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /\+ new card/i })).not.toBeDisabled()
@@ -45,7 +46,7 @@ describe('Timey Wimey', () => {
     const newDetails = newTimeCardDetailsBuilder()
 
     userEvent.clear(screen.getAllByLabelText(/start/i)[0])
-    userEvent.type(screen.getAllByLabelText(/start/i)[0], newDetails.start, {  })
+    userEvent.type(screen.getAllByLabelText(/start/i)[0], newDetails.start, {})
     expect(screen.getAllByLabelText(/start/i)[0]).toHaveValue(newDetails.start)
 
     userEvent.clear(screen.getAllByLabelText(/end/i)[0])
@@ -59,5 +60,28 @@ describe('Timey Wimey', () => {
     userEvent.clear(screen.getAllByLabelText(/details/i)[0])
     userEvent.type(screen.getAllByLabelText(/details/i)[0], newDetails.details)
     expect(screen.getAllByLabelText(/details/i)[0]).toHaveValue(newDetails.details)
+  })
+
+  it('displays the total time spent', () => {
+    render(<App />, {
+      initialState: {
+        roundToMinutes: 15,
+        timeCards: [
+          timeCardBuilder({
+            overrides: {
+              start: perBuild(() => new Date('2020-12-13T10:00:00.000')),
+              end: perBuild(() => new Date('2020-12-13T10:30:00.000'))
+            }
+          }),
+          timeCardBuilder({
+            traits: 'noend', overrides: {
+              start: perBuild(() => new Date('2020-12-13T10:30:00.000'))
+            }
+          }),
+        ]
+      }
+    })
+
+    expect(screen.getByLabelText(/time spent/i)).toHaveTextContent('0h 30m')
   })
 })

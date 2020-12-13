@@ -2,18 +2,20 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import './app.css'
 import TimeCardDisplay from './components/timeCard'
-import { addTimeCard, selectTimeCards } from './store'
+import { addTimeCard, selectTimeCards, selectTimeSheetDate, selectTimeSpent } from './store'
 
 function App() {
   const dispatch = useDispatch()
+  const timeSheetDate = useSelector(selectTimeSheetDate)
+  const timeSpent = useSelector(selectTimeSpent)
   const timeCards = useSelector(selectTimeCards)
 
   const newTimeCard = () => dispatch(addTimeCard())
 
   return (
     <>
-      <h1>{new Date().toLocaleDateString()}</h1>
-      <h2>0h</h2>
+      <h1 aria-label="Date">{timeSheetDate.toLocaleDateString()}</h1>
+      <h2 aria-label="Total Time Spent">{timeSpent}</h2>
       {timeCards.length > 0 ? 
         timeCards.map(card => (
           <TimeCardDisplay key={card.id} card={card} />
