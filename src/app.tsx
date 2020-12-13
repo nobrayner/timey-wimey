@@ -13,6 +13,7 @@ function App() {
   return (
     <>
       <h1>{new Date().toLocaleDateString()}</h1>
+      <h2>0h</h2>
       {timeCards.length > 0 ? 
         timeCards.map(card => (
           <TimeCardDisplay key={card.id} card={card} />
