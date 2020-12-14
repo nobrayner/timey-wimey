@@ -3,6 +3,7 @@ import { render, screen, timeCardBuilder, newTimeCardDetailsBuilder } from '../t
 import userEvent from '@testing-library/user-event'
 import App from '../app'
 import { perBuild } from '@jackfranklin/test-data-bot'
+import { formatDateTimeAsTimeOnly } from '../utils'
 
 describe('Timey Wimey', () => {
   it('displays the current date as a heading, 0 total hours, help text, and a new button when there are no entries', () => {
@@ -70,18 +71,28 @@ describe('Timey Wimey', () => {
           timeCardBuilder({
             overrides: {
               start: perBuild(() => new Date('2020-12-13T10:00:00.000')),
-              end: perBuild(() => new Date('2020-12-13T10:30:00.000'))
-            }
-          }),
-          timeCardBuilder({
-            traits: 'noend', overrides: {
-              start: perBuild(() => new Date('2020-12-13T10:30:00.000'))
+              end: perBuild(() => new Date('2020-12-13T11:30:00.000')),
             }
           }),
         ]
       }
     })
 
-    expect(screen.getByLabelText(/time spent/i)).toHaveTextContent('0h 30m')
+    expect(screen.getByLabelText(/time spent/i)).toHaveTextContent('1h 30m')
+  })
+
+  it('cannot set an end time less than the start time', () => {
+    const card = timeCardBuilder({ overrides: { start: perBuild(() => new Date('2020-12-13T10:30:00.000')), end: perBuild(() => new Date('2020-12-13T11:30:00.000')) } })
+    const start: Date = card.start as Date
+    render(<App />, {
+      initialState: {
+        roundToMinutes: 15,
+        timeCards: [card]
+      }
+    })
+
+    userEvent.clear(screen.getByLabelText(/end/i))
+    userEvent.type(screen.getByLabelText(/end/i), '09:00')
+    expect(screen.getByLabelText(/end/i)).toHaveValue(formatDateTimeAsTimeOnly(start))
   })
 })

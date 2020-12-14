@@ -16,7 +16,7 @@ function App() {
     <>
       <h1 aria-label="Date">{timeSheetDate.toLocaleDateString()}</h1>
       <h2 aria-label="Total Time Spent">{timeSpent}</h2>
-      {timeCards.length > 0 ? 
+      {timeCards.length > 0 ?
         timeCards.map(card => (
           <TimeCardDisplay key={card.id} card={card} />
         )) : <p data-testid="helptext">Click the '+ New Card' button to start adding time cards!</p>}

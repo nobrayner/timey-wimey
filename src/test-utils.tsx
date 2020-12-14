@@ -31,15 +31,19 @@ export const timeCardBuilder = build<TimeCard>('TimeCard', {
     noend: {
       overrides: { end: perBuild(() => undefined) }
     }
-  }
+  },
 })
-
-
 export const newTimeCardDetailsBuilder = build<{ start: string, end: string, ticket: string, details: string }>('TimeCard', {
   fields: {
     start: fake(f => `${f.random.number(23).toString().padStart(2, '0')}:${f.random.number(59).toString().padStart(2, '0')}`),
     end: fake(f => `${f.random.number(23).toString().padStart(2, '0')}:${f.random.number(59).toString().padStart(2, '0')}`),
     ticket: randomTicketID(),
     details: fake(f => f.lorem.words()),
+  },
+  postBuild: (timeCard) => {
+    const startHours = Number(timeCard.start.split(':')[0])
+    const endMinutes = timeCard.end.split(':')[1]
+    timeCard.end = `${startHours + (Math.random() * (23 - startHours) | 0)}:${endMinutes}`
+    return timeCard
   }
 })

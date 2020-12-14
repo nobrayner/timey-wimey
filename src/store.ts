@@ -64,7 +64,18 @@ const timeCardsSlice = createSlice({
         const [hours, minutes] = newValue.trim().split(':').map(v => Number(v))
         if (!isNaN(hours) && !isNaN(minutes)) {
           const date = selectTimeSheetDate.resultFunc(state)
-          timeCard[dateType] = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hours, minutes)
+          const newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hours, minutes)
+          if (dateType === 'end') {
+            if (newDate.valueOf() - (timeCard['start']?.valueOf() ?? 0) >= 0) {
+              timeCard['end'] = newDate
+            } else {
+              timeCard['end'] = timeCard['start']
+            }
+          } else {
+            timeCard[dateType] = newDate
+          }
+        } else {
+          timeCard[dateType] = undefined
         }
       }
     },
@@ -86,7 +97,7 @@ export const store = configureStore({
   reducer,
   middleware: getDefaultMiddleware({
     serializableCheck: {
-      ignoredActions: ['timeCards/addTimeCard']
+      ignoredPaths: ['timeCards']
     }
   })
 });
