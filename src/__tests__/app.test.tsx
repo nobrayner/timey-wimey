@@ -26,7 +26,7 @@ describe('Timey Wimey', () => {
 
     expect(screen.queryAllByTestId(/^timecard/i)).toHaveLength(0)
 
-    userEvent.click(screen.getByRole('button', { name: /\+ new card/i }))
+    userEvent.click(screen.getByRole('button', { name: /new card/i }))
     expect(screen.getAllByTestId(/^timecard/i)).toHaveLength(1)
     expect(screen.getByLabelText(/start/i)).toHaveValue('10:00')
 
@@ -52,6 +52,7 @@ describe('Timey Wimey', () => {
 
     userEvent.clear(screen.getAllByLabelText(/end/i)[0])
     userEvent.type(screen.getAllByLabelText(/end/i)[0], newDetails.end)
+
     expect(screen.getAllByLabelText(/end/i)[0]).toHaveValue(newDetails.end)
 
     userEvent.clear(screen.getAllByLabelText(/ticket/i)[0])
@@ -94,5 +95,29 @@ describe('Timey Wimey', () => {
     userEvent.clear(screen.getByLabelText(/end/i))
     userEvent.type(screen.getByLabelText(/end/i), '09:00')
     expect(screen.getByLabelText(/end/i)).toHaveValue(formatDateTimeAsTimeOnly(start))
+  })
+
+  it('sets the previous time card\'s end time if not already set', () => {
+    //@ts-ignore
+    jest.useFakeTimers('modern')
+    //@ts-ignore
+    jest.setSystemTime(new Date('2020-12-13T10:05:00.000').getTime())
+
+    render(<App />, {
+      initialState: {
+        roundToMinutes: 15,
+        timeCards: [
+          timeCardBuilder({
+            traits: ['noend']
+          })
+        ]
+      }
+    })
+
+    userEvent.click(screen.getByRole('button', { name: /new card/i }))
+    expect(screen.getAllByLabelText(/end/)[0]).toHaveValue('10:00')
+    expect(screen.getAllByLabelText(/start/i)[1]).toHaveValue((screen.getAllByLabelText(/end/i)[0] as HTMLInputElement).value)
+
+    jest.useRealTimers()
   })
 })

@@ -19,11 +19,23 @@ export { screen } from '@testing-library/react'
 
 const randomTicketID = () => fake(f => `${f.lorem.word()}-${f.random.number()}`)
 
+function endOfDay(day: Date): Date {
+  const endOfDay = new Date(day)
+  endOfDay.setHours(23, 59, 0, 0)
+  return endOfDay
+}
+
+function addHours(date: Date, ...args: Parameters<typeof Date.prototype.setHours>): Date {
+  const withHours = new Date(date)
+  withHours.setHours(args[0], args[1], args[2], args[3])
+  return withHours
+}
+
 export const timeCardBuilder = build<TimeCard>('TimeCard', {
   fields: {
     id: sequence(),
-    start: fake(f => f.date.recent(1)),
-    end: fake(f => f.date.recent(1)),
+    start: fake(f => f.date.between(new Date(), endOfDay(new Date()))),
+    end: fake(f => f.date.between(addHours(new Date(), 0, 30), endOfDay(new Date()))),
     ticket: randomTicketID(),
     details: fake(f => f.lorem.words()),
   },
@@ -43,7 +55,7 @@ export const newTimeCardDetailsBuilder = build<{ start: string, end: string, tic
   postBuild: (timeCard) => {
     const startHours = Number(timeCard.start.split(':')[0])
     const endMinutes = timeCard.end.split(':')[1]
-    timeCard.end = `${startHours + (Math.random() * (23 - startHours) | 0)}:${endMinutes}`
+    timeCard.end = `${(startHours + (Math.random() * (23 - startHours) | 0)).toString().padStart(2, '0')}:${endMinutes}`
     return timeCard
   }
 })
